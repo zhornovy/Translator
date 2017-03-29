@@ -72,6 +72,7 @@
     <Compile Include="Pnotation.cs" />
     <Compile Include="Poliz.cs" />
     <Compile Include="PrecedenceAnalyzer.cs" />
+    <Compile Include="PrecedenceAnalyzerPolizArithmatic.cs" />
     <Compile Include="Rel.cs" />
     <Compile Include="SyntaxAnalyzer.cs" />
     <Compile Include="Automat.cs" />
