@@ -1,2 +1,2 @@
-if a > b * (2 + 3) thengoto m2
- 
+if a > b * (2 + 3) thengoto m3 
+i = a + b 
