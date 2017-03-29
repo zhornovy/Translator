@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="AutomatWithMagaz.cs" />
     <Compile Include="Grammar.cs" />
+    <Compile Include="Pnotation.cs" />
     <Compile Include="Poliz.cs" />
     <Compile Include="PrecedenceAnalyzer.cs" />
     <Compile Include="Rel.cs" />
@@ -82,7 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">

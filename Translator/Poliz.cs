@@ -7,24 +7,7 @@ using System.Threading.Tasks;
 
 namespace Translator
 {
-    enum PolizType
-    {
-        id,con,symbol
-    }
-    class PolizElem
-    {
-        public readonly string Name;
-        public readonly PolizType Type;
-
-        public PolizElem(string n, PolizType t)
-        {
-            Name = n;
-            Type = t;
-        }
-    }
-
-
-    class PolizCalc
+   class PolizCalc
     {
         private static double ParseNum(string s)
         {

@@ -40,12 +40,12 @@ namespace Translator
         public bool Check()
         {
             bool founded = false;
-            if (CurrentLexem.Kod == 1) // {
+            if (CurrentLexem.Code == 1) // {
             {
                 Current++;
                 if (SpisOps())
                 {
-                    if (CurrentLexem.Kod == 2) // }
+                    if (CurrentLexem.Code == 2) // }
                         founded = true;
                 }
             }
@@ -55,10 +55,10 @@ namespace Translator
         private bool SpisOps()
         {
             var founded = false;
-            if (CurrentLexem.Kod == 27) // мітка
+            if (CurrentLexem.Code == 27) // мітка
             {
                 Current++;
-                if (CurrentLexem.Kod == 3) // :
+                if (CurrentLexem.Code == 3) // :
                 {
                     Current++;
                     if (Oper())
@@ -70,16 +70,16 @@ namespace Translator
 
                 founded = true;
             }
-            while (founded && CurrentLexem.Kod == 8)
+            while (founded && CurrentLexem.Code == 8)
             {
                 Current++;
                 if (CurrentLexem.Name != "next" && CurrentLexem.Name != "}")
                 {
 
-                    if (CurrentLexem.Kod == 27) // мітка
+                    if (CurrentLexem.Code == 27) // мітка
                     {
                         Current++;
-                        if (CurrentLexem.Kod == 3)
+                        if (CurrentLexem.Code == 3)
                         { // :
                             Current++;
                             if (Oper())
@@ -109,10 +109,10 @@ namespace Translator
         {
             var founded = false;
             /* Присвоение */
-            if (CurrentLexem.Kod == 25) // id
+            if (CurrentLexem.Code == 25) // id
             {
                 Current++;
-                if (CurrentLexem.Kod == 6) // =
+                if (CurrentLexem.Code == 6) // =
                 {
                     Current++;
                     if (Vyrazenie())
@@ -125,28 +125,28 @@ namespace Translator
                 }
             }
             /* Цикл */
-            else if (CurrentLexem.Kod == 4) // for
+            else if (CurrentLexem.Code == 4) // for
             {
                 Current++;
-                if (CurrentLexem.Kod == 25) // id
+                if (CurrentLexem.Code == 25) // id
                 {
                     Current++;
-                    if (CurrentLexem.Kod == 6) // =
+                    if (CurrentLexem.Code == 6) // =
                     {
                         Current++;
                         if (Vyrazenie())
                         {
-                            if (CurrentLexem.Kod == 5) // to
+                            if (CurrentLexem.Code == 5) // to
                             {
                                 Current++;
                                 if (Vyrazenie())
                                 {
-                                    if (CurrentLexem.Kod == 8) // \n
+                                    if (CurrentLexem.Code == 8) // \n
                                     {
                                         Current++;
                                         if (SpisOps())
                                         {
-                                            if (CurrentLexem.Kod == 7) // next
+                                            if (CurrentLexem.Code == 7) // next
                                             {
                                                 Current++;
                                                 founded = true;
@@ -160,15 +160,15 @@ namespace Translator
                 }
             }
             /* Логвир */
-            else if (CurrentLexem.Kod == 9) // if
+            else if (CurrentLexem.Code == 9) // if
             {
                 Current++;
                 if (LogVyr())
                 {
-                    if (CurrentLexem.Kod == 10) // thengoto
+                    if (CurrentLexem.Code == 10) // thengoto
                     {
                         Current++;
-                        if (CurrentLexem.Kod == 27) // мітка
+                        if (CurrentLexem.Code == 27) // мітка
                         {
                             Current++;
                             founded = true;
@@ -177,15 +177,15 @@ namespace Translator
                 }
             }
             // read() and write()
-            else if ((CurrentLexem.Kod == 31) || (CurrentLexem.Kod == 32)) // read
+            else if ((CurrentLexem.Code == 31) || (CurrentLexem.Code == 32)) // read
             {
                 Current++;
-                if (CurrentLexem.Kod == 29) // (
+                if (CurrentLexem.Code == 29) // (
                 {
                     Current++;
                     if (SpisId())
                     {
-                        if (CurrentLexem.Kod == 30) // )
+                        if (CurrentLexem.Code == 30) // )
                         {
                             Current++;
                             founded = true;
@@ -203,7 +203,7 @@ namespace Translator
             {
                 founded = true;
             }
-            while (founded && (CurrentLexem.Kod == 11 || CurrentLexem.Kod == 12)) // + or -
+            while (founded && (CurrentLexem.Code == 11 || CurrentLexem.Code == 12)) // + or -
             {
                 Current++;
                 if (term())
@@ -225,7 +225,7 @@ namespace Translator
             {
                 founded = true;
             }
-            while (founded && (CurrentLexem.Kod == 13 || CurrentLexem.Kod == 14)) // * or /
+            while (founded && (CurrentLexem.Code == 13 || CurrentLexem.Code == 14)) // * or /
             {
                 Current++;
                 if (mnoj())
@@ -243,16 +243,16 @@ namespace Translator
         private bool mnoj()
         {
             var founded = false;
-            if (CurrentLexem.Kod == 25 || CurrentLexem.Kod == 26) // id or const
+            if (CurrentLexem.Code == 25 || CurrentLexem.Code == 26) // id or const
             {
                 founded = true;
             }
-            else if (CurrentLexem.Kod == 29) // (
+            else if (CurrentLexem.Code == 29) // (
             {
                 Current++;
                 if (Vyrazenie())
                 {
-                    if (CurrentLexem.Kod == 30) // )
+                    if (CurrentLexem.Code == 30) // )
                     {
                         founded = true;
                     }
@@ -268,7 +268,7 @@ namespace Translator
             {
                 founded = true;
             }
-            while (CurrentLexem.Kod == 15) // or
+            while (CurrentLexem.Code == 15) // or
             {
                 Current++;
                 if (LogTerm())
@@ -290,7 +290,7 @@ namespace Translator
             {
                 founded = true;
             }
-            while (CurrentLexem.Kod == 16) // or
+            while (CurrentLexem.Code == 16) // or
             {
                 Current++;
                 if (LogMnoj())
@@ -316,7 +316,7 @@ namespace Translator
             else {
                 Current--;
             }
-            if (CurrentLexem.Kod == 33) // not 
+            if (CurrentLexem.Code == 33) // not 
             {
                 Current++;
                 if (LogMnoj())
@@ -328,12 +328,12 @@ namespace Translator
                     founded = false;
                 }
             }
-            else if (CurrentLexem.Kod == 17) // [
+            else if (CurrentLexem.Code == 17) // [
             {
                 Current++;
                 if (LogVyr())
                 {
-                    if (CurrentLexem.Kod == 18) //]
+                    if (CurrentLexem.Code == 18) //]
                     {
                         Current++;
                         founded = true;
@@ -349,7 +349,7 @@ namespace Translator
             var founded = false;
             if (Vyrazenie())
             {
-                if (CurrentLexem.Kod >= 19 && CurrentLexem.Kod <= 24)
+                if (CurrentLexem.Code >= 19 && CurrentLexem.Code <= 24)
                 {
                     Current++;
                     if (Vyrazenie())
@@ -364,15 +364,15 @@ namespace Translator
         private bool SpisId()
         {
             var found = false;
-            if (CurrentLexem.Kod == 25)//id
+            if (CurrentLexem.Code == 25)//id
             {
                 found = true;
                 Current++;
             }
-            while (CurrentLexem.Kod == 28) // ,
+            while (CurrentLexem.Code == 28) // ,
             {
                 Current++;
-                if (CurrentLexem.Kod == 25)//id
+                if (CurrentLexem.Code == 25)//id
                 {
                     found = true;
                     Current++;

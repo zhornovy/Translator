@@ -107,7 +107,7 @@ namespace Translator
         }
         public static string[] HeaderToArray()
         {
-            return new string[] { "Name", "Kod"};
+            return new string[] { "Name", "Code"};
         }
         public static string[] ToArray(Lexeme Ob)
         {
@@ -137,7 +137,7 @@ namespace Translator
         
         public static string[] HeaderToArray()
         {
-             return new string[] { "Name", "Kod", "Defined", "Used" };
+             return new string[] { "Name", "Code", "Defined", "Used" };
         }
 
         public static string[] ToArray(Metka Ob)
@@ -149,22 +149,22 @@ namespace Translator
     class Output{
         public int Line { get; set; }
         public string Name { get; set; }
-        public int Kod { get; set; }
+        public int Code { get; set; }
         public int KodInTable { get; set; }
 
-        public Output(int Line, string Name, int Kod, int KodIn)
+        public Output(int Line, string Name, int code, int KodIn)
         {
             this.Line = Line;
             this.Name = Name;
-            this.Kod = Kod;
+            this.Code = code;
             this.KodInTable = KodIn;
         }
         public static string[] ToArray(Output Ob){
-            return new string[] { Ob.Line.ToString(), Ob.Name, Ob.Kod.ToString(), Ob.KodInTable!=0?Ob.KodInTable.ToString():" " };
+            return new string[] { Ob.Line.ToString(), Ob.Name, Ob.Code.ToString(), Ob.KodInTable!=0?Ob.KodInTable.ToString():" " };
         }
         public static string[] HeaderToArray()
         {
-            return new string[] { "Line", "Name", "Kod", "KodInTable" };
+            return new string[] { "Line", "Name", "Code", "KodInTable" };
         }
     }
 }
