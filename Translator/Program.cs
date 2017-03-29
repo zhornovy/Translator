@@ -47,10 +47,15 @@ namespace Translator
             //    var synAuto = new AutomatWithStack(automatTable, lexemes.OutputList);
             //    synAuto.Initializer();
             //}
+            //if (Errors == 0)
+            //{
+            //    var pa = new PrecedenceAnalyzer(lexemes.OutputList);
+            //    pa.Do();
+            //}
             if (Errors == 0)
             {
-                var pa = new PrecedenceAnalyzer(lexemes.OutputList);
-                pa.Do();
+                var pa = new Pnotation(lexemes.OutputList);
+                //pa.Do();
             }
             Console.Read();
         }
