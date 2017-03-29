@@ -23,7 +23,7 @@ namespace Translator
         {
             if (o is string)
                 return o as string;
-            var type = (o as Output).Kod;
+            var type = (o as Output).Code;
             if (type == 25)
                 return "ід";
             if (type == 26)
@@ -101,9 +101,9 @@ namespace Translator
                     
                     var subText = new List<string>();
                     var adder = stack.Pop();
-                    if (adder.Kod == 25)
+                    if (adder.Code == 25)
                         subText.Add("ід");
-                    if (adder.Kod == 26)
+                    if (adder.Code == 26)
                         subText.Add("константа");
                     else
                         subText.Add(adder.Name);
@@ -111,9 +111,9 @@ namespace Translator
                     while (Compare(stack.Peek(), subText[subText.Count - 1]) != "<" && stack.Peek().Name != "#")
                     {
                         adder = stack.Pop();
-                        if (adder.Kod == 25)
+                        if (adder.Code == 25)
                             subText.Add("ід");
-                        if (adder.Kod == 26)
+                        if (adder.Code == 26)
                             subText.Add("константа");
                         else
                             subText.Add(adder.Name);
@@ -125,9 +125,9 @@ namespace Translator
                     if (i == lexTable.Count - 1 && subText[subText.Count - 1] == "<сп.оп1>")
                         subTestS += " " + lexTable[i].Name;
 
-                    if (adder.Kod == 25)
+                    if (adder.Code == 25)
                         POLIZ.Add(new PolizElem(adder.Name,PolizType.id));
-                    if (adder.Kod == 26)
+                    if (adder.Code == 26)
                         POLIZ.Add(new PolizElem(adder.Name, PolizType.con));
                     else
                     {

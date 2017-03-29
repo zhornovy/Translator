@@ -52,9 +52,10 @@ namespace Translator
             //    var pa = new PrecedenceAnalyzer(lexemes.OutputList);
             //    pa.Do();
             //}
+            var pa = new Pnotation(lexemes.OutputList);
             if (Errors == 0)
             {
-                var pa = new Pnotation(lexemes.OutputList);
+                //var pa = new Pnotation(lexemes.OutputList);
                 //pa.Do();
             }
             Console.Read();
