@@ -1,9 +1,5 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Translator
 {
@@ -21,7 +17,7 @@ namespace Translator
                 s = s + "0" ;
             }
             s = s.Replace('.', ',');
-            int indexOfE = s.IndexOf("E");
+			int indexOfE = s.IndexOf("E",StringComparison.Ordinal);
             if (indexOfE > 0)
             {
                 if (s[indexOfE - 1] == ',')

@@ -12,7 +12,7 @@ namespace Translator
 
     enum PolizType
     {
-        id, con, symbol , metka
+        id, con, symbol , metka, metkaUser
     }
     class PolizElem
     {
@@ -34,9 +34,11 @@ namespace Translator
         private Dictionary<string, string> gramm = g.grammar;
         private List<PolizElem> POLIZ = new List<PolizElem>();
         private Stack<Output> stack = new Stack<Output>();
-        public Pnotation(List<Output> LO )
+		private List<Metka> MetkaList;
+        public Pnotation(List<Output> LO , List<Metka> Metka)
         {
             lexemesOutput = LO;
+			MetkaList = Metka;
             DO();
         }
 
@@ -75,9 +77,15 @@ namespace Translator
         public void DO()
         {
             var i = 0;
+            var inif = 0;
             while (!(i >= lexemesOutput.Count))
             {
                 var curLex = lexemesOutput[i];
+                if (curLex.Name == "{" || curLex.Name == "}" || curLex.Name == ":")
+                {
+                    i++;
+                    continue;
+                }
                 if (curLex.Code == 25 || curLex.Code == 26 || curLex.Code == 27)
                 {
                     if (curLex.Code == 25)
@@ -90,7 +98,7 @@ namespace Translator
                     }
                     if (curLex.Code == 27)
                     {
-                        POLIZ.Add(new PolizElem(curLex.Name, PolizType.metka));
+						POLIZ.Add(new PolizElem(curLex.Name, PolizType.metkaUser));
                     }
                     i++;
                     continue;
@@ -133,6 +141,7 @@ namespace Translator
                 {
                     stack.Push(curLex);
                     i++;
+                    inif++;
                     continue;
                 }
                 if (curLex.Name == "thengoto")
@@ -141,25 +150,68 @@ namespace Translator
                     {
                         POLIZ.Add(new PolizElem(stack.Pop().Name, PolizType.symbol));
                     }
-                    POLIZ.Add(new PolizElem("mi UPL",PolizType.symbol));
-                    stack.Push(new Output(0, "mi", 0, 0));
+					int mi = 0;
+					var metkaName = "m" + mi;
+					do
+					{
+						try
+						{
+							MetkaList.First((arg) => arg.Name == metkaName);
+							mi++;
+							metkaName = "m" + mi;
+						}
+						catch (Exception)
+						{
+
+							MetkaList.Add(new Metka(metkaName, 1));
+							break;
+						}
+					} while (true);
+
+					POLIZ.Add(new PolizElem(metkaName + " UPL",PolizType.symbol));
+					stack.Push(new Output(0, metkaName, 0, 0));
                     i++;
                     continue;
                 }
                 if (curLex.Name == "\\n")
                 {
-                    while (stack.Peek().Name != "if")
-                    {
-                        POLIZ.Add(new PolizElem(stack.Pop().Name, PolizType.symbol));
-                    }
-                    stack.Pop(); // Deleting 'if' symbol from the stack
+					if (inif > 0)
+					{
+						while (stack.Peek().Name != "if")
+						{
+							var elem = stack.Pop();
+							if (elem.Code == 27)
+							{
+
+								POLIZ.Add(new PolizElem(elem.Name + " BP", PolizType.symbol));
+							}
+							else
+							{
+								POLIZ.Add(new PolizElem(elem.Name, PolizType.symbol));
+							}
+						}
+						stack.Pop(); // Deleting 'if' symbol from the stack
+						inif--;
+					}
+					else
+					{
+						while (stack.Count != 0)
+						{
+							POLIZ.Add(new PolizElem(stack.Pop().Name, PolizType.symbol));
+						}
+					}
                     i++;
                     continue;
                 }
             }
             while (stack.Count != 0)
             {
-                POLIZ.Add(new PolizElem(stack.Pop().Name, PolizType.symbol));
+				var elem = stack.Pop();
+				if (elem.Name != "if")
+				{
+					POLIZ.Add(new PolizElem(elem.Name, PolizType.symbol));
+				}
+                
             }
             POLIZ.ForEach(x => Console.Write(x.Name + " "));
             Console.WriteLine();
