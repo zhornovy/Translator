@@ -46,7 +46,7 @@ namespace Translator
         {
             string text;
             text = File.ReadAllText(
-                        @"..\..\myProg.txt",
+                        @"../../myProg.txt",
                         Encoding.UTF8);
             RegexOptions options = RegexOptions.None;
             Regex regex = new Regex("[ ]{2,}", options);

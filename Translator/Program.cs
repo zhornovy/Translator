@@ -10,6 +10,7 @@ namespace Translator
     {
         static void Main(string[] args)
         {
+
             var Errors = 0;
             string text = View.GetText();
             Lexemes lexemes = new Lexemes();
@@ -28,33 +29,34 @@ namespace Translator
             }
             View.ShowLexTables(lexemes);
             Errors += automat.CheckMetka();
-            //if (Errors == 0)
-            //{
-            //    try
-            //    {
-            //        var syn = new SyntaxAnalyzer(lexemes.OutputList);
-            //        syn.Result();
-            //    }
-            //    catch (Exception ex)
-            //    {
+            if (true) // Errors == 1
+            {
+                try
+                {
+                    var syn = new SyntaxAnalyzer(lexemes.OutputList);
+                    syn.Result();
+                }
+                catch (Exception ex)
+                {
 
-            //        View.ShowError(ex.Message);
-            //    }
-            //}
-            //if (Errors == 0)
-            //{
-            //    var automatTable = new AutomatTable();
-            //    var synAuto = new AutomatWithStack(automatTable, lexemes.OutputList);
-            //    synAuto.Initializer();
-            //}
+                    View.ShowError(ex.Message);
+                }
+            }
+            if (true) // Errors == 1
+            {
+                var automatTable = new AutomatTable();
+                var synAuto = new AutomatWithStack(automatTable, lexemes.OutputList);
+                synAuto.Initializer();
+            }
             //if (Errors == 0)
             //{
             //    var pa = new PrecedenceAnalyzer(lexemes.OutputList);
             //    pa.Do();
             //}
+            var pnotation = new Pnotation(lexemes.OutputList, lexemes.MetkaList);
             if (Errors == 0)
             {
-                var pa = new Pnotation(lexemes.OutputList);
+                //var pa = new Pnotation(lexemes.OutputList);
                 //pa.Do();
             }
             Console.Read();

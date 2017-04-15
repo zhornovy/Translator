@@ -1,19 +1,19 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Translator
 {
-    internal class PrecedenceAnalyzer
+    class PrecedenceAnalyzer
     {
-        private static Grammar g = new Grammar();
-        private Dictionary<string, string> gramm = g.grammar;
-        private List<Output> lexTable;
-        private List<PolizElem> POLIZ = new List<PolizElem>();
-        private List<Relation> rels = Rels.relations;
-        private Stack<Output> stack = new Stack<Output>();
-
+        List<Relation> rels = Rels.relations;
+        List<Output> lexTable;
+        Stack<string> stack = new Stack<string>();
+        static Grammar g = new Grammar();
+        Dictionary<string, string> gramm = g.grammar;
+        //Dictionary<string, string> gramm;
         public PrecedenceAnalyzer(List<Output> table)
         {
             lexTable = table;
@@ -22,15 +22,29 @@ namespace Translator
         private static string ToString(object o)
         {
             if (o is string)
+            {
                 return o as string;
-            var type = (o as Output).Kod;
-            if (type == 25)
-                return "ід";
-            if (type == 26)
-                return "константа";
-            if (type == 27)
-                return "мітка";
-            return (o as Output).Name;
+            }
+            else
+            {
+                var type = (o as Output).Code;
+                if (type == 25)
+                {
+                    return "ід";
+                }
+                else if (type == 26)
+                {
+                    return "константа";
+                }
+                else if (type == 27)
+                {
+                    return "мітка";
+                }
+                else
+                {
+                    return (o as Output).Name;
+                }
+            }
         }
 
         private string Compare(object f, object s)
@@ -39,124 +53,81 @@ namespace Translator
             firstElem = ToString(f);
             secondElem = ToString(s);
             if (firstElem == "#")
+            {
                 return "<";
+            }
             if (secondElem == "#")
+            {
                 return ">";
+            }
             return rels.First(a => a.firstS == firstElem && a.secondS == secondElem)
-                .symbol;
+                       .symbol;
         }
 
         public void Do()
         {
             var i = 0;
-            stack.Push(new Output(0, "#",0,0));
-            var endSymb = 0;
-            while (!(i >= lexTable.Count-1 && stack.Count<=2))
+            stack.Push("#");
+            while ( i < lexTable.Count)
             {
-                var relation = "";
+                string relation;
                 if (i == 0)
                 {
-                    stack.Push(lexTable[i]);
-                    if (i >= lexTable.Count - 1)
-                        endSymb = 1;
-                    else
-                        i++;
+                    stack.Push(ToString(lexTable[i]));
+                    i++;
                     continue;
                 }
-
-                if (endSymb == 0)
-                    relation = Compare(stack.Peek(), lexTable[i]);
+                if (i == lexTable.Count - 1)
+                {
+                    relation = ">";
+                }
                 else
-                    relation = Compare(stack.Peek(), "#");
+                {
+                    relation = Compare(stack.Peek(), lexTable[i]);
+                }
 
                 var tempList = stack.ToList();
                 tempList.Reverse();
-                tempList.ForEach(x => Console.Write(x.Name));
-                Console.Write("\t");
+                tempList.ForEach(Console.Write);
+                Console.Write( "\t");
                 View.Yellow(relation);
-                if (endSymb == 0)
-                {
-                    Console.WriteLine("\t{0} {1} {2}", lexTable[i].Name,
-                        i + 1 < lexTable.Count ? lexTable[i + 1].Name : "",
-                        i + 2 < lexTable.Count ? lexTable[i + 2].Name : "");
-                }
-                else
-                {
-                    Console.WriteLine("\t#");
-                }
-                
+                Console.WriteLine("\t{0} {1} {2}", lexTable[i].Name, i + 1 < lexTable.Count ? lexTable[i + 1].Name : "", i + 2 < lexTable.Count ? lexTable[i + 2].Name : "", relation);
 
 
                 if (relation == "<" || relation == "=")
                 {
-                    stack.Push(lexTable[i]);
-                    if (i >= lexTable.Count - 1)
-                        endSymb = 1;
-                    else
-                        i++;
+                    stack.Push(ToString(lexTable[i]));
+                    i++;
                     continue;
                 }
                 if (relation == ">")
                 {
-                    
-                    var subText = new List<string>();
-                    var adder = stack.Pop();
-                    if (adder.Kod == 25)
-                        subText.Add("ід");
-                    if (adder.Kod == 26)
-                        subText.Add("константа");
-                    else
-                        subText.Add(adder.Name);
-
-                    while (Compare(stack.Peek(), subText[subText.Count - 1]) != "<" && stack.Peek().Name != "#")
+                    List<string> subText = new List<string>();
+                    subText.Add(stack.Pop());
+                    while (Compare(stack.Peek(), subText[subText.Count - 1]) != "<" && stack.Peek()!= "#")
                     {
-                        adder = stack.Pop();
-                        if (adder.Kod == 25)
-                            subText.Add("ід");
-                        if (adder.Kod == 26)
-                            subText.Add("константа");
-                        else
-                            subText.Add(adder.Name);
+                       subText.Add(stack.Pop()); 
                     }
                     subText.Reverse();
-                    var subTestS = subText[0];
+                    string subTestS = subText[0];
                     for (var j = 1; j < subText.Count; j++)
-                        subTestS += " " + subText[j];
-                    if (i == lexTable.Count - 1 && subText[subText.Count - 1] == "<сп.оп1>")
-                        subTestS += " " + lexTable[i].Name;
-
-                    if (adder.Kod == 25)
-                        POLIZ.Add(new PolizElem(adder.Name,PolizType.id));
-                    if (adder.Kod == 26)
-                        POLIZ.Add(new PolizElem(adder.Name, PolizType.con));
-                    else
                     {
-                        if (subTestS.IndexOf("+")>0)
-                        {
-                            POLIZ.Add(new PolizElem("+", PolizType.symbol));
-                        }
-                        if (subTestS.IndexOf("-") > 0)
-                        {
-                            POLIZ.Add(new PolizElem("-", PolizType.symbol));
-                        }
-                        if (subTestS.IndexOf("*") > 0)
-                        {
-                            POLIZ.Add(new PolizElem("*", PolizType.symbol));
-                        }
-                        if (subTestS.IndexOf("/") > 0)
-                        {
-                            POLIZ.Add(new PolizElem("/", PolizType.symbol));
-                        }
+                        subTestS += " " + subText[j];
                     }
-                    stack.Push(new Output(0, gramm[subTestS],0,0));
-                    
-                }
+                    if (i == lexTable.Count - 1 && subText[subText.Count - 1] == "<сп.оп1>")
+                    {
+                         subTestS += " " + lexTable[i].Name;
+                    }
+                    stack.Push(gramm[subTestS]);
+                    if (stack.Peek() == "<прог>")
+                    {
+                        Console.WriteLine("OK OK OK");
+                        break;
+                    }
+                } 
             }
-            Console.WriteLine("Ok Ok Ok");
-            POLIZ.ForEach(x => Console.Write(x.Name + " "));
-            Console.WriteLine();
-            View.Yellow("Res = ");
-            Console.WriteLine(PolizCalc.Calc(POLIZ).ToString().Replace(",","."));
         }
+
+
     }
 }

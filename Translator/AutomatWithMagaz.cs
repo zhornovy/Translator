@@ -147,7 +147,7 @@ namespace Translator
                     break;
                 }
             }
-            if (lexemes[lexemes.Count-1].Kod!=2)
+            if (lexemes[lexemes.Count-1].Code!=2)
             {
                 View.ShowError("Unexpected end of file");
             }
@@ -157,9 +157,9 @@ namespace Translator
             bool noincrement = false;
             for (int j = 0; j < currentStates.Count; j++)
             {
-                if (currentStates[j].Symbol == lex.Kod)
+                if (currentStates[j].Symbol == lex.Code)
                 {
-                    if (lex.Kod == 8)
+                    if (lex.Code == 8)
                     {
                         Line++;
                     }

@@ -1,30 +1,9 @@
 ﻿using System;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Translator
 {
-    enum PolizType
-    {
-        id,con,symbol
-    }
-    class PolizElem
-    {
-        public readonly string Name;
-        public readonly PolizType Type;
-
-        public PolizElem(string n, PolizType t)
-        {
-            Name = n;
-            Type = t;
-        }
-    }
-
-
-    class PolizCalc
+   class PolizCalc
     {
         private static double ParseNum(string s)
         {
@@ -38,7 +17,7 @@ namespace Translator
                 s = s + "0" ;
             }
             s = s.Replace('.', ',');
-            int indexOfE = s.IndexOf("E");
+			int indexOfE = s.IndexOf("E",StringComparison.Ordinal);
             if (indexOfE > 0)
             {
                 if (s[indexOfE - 1] == ',')
